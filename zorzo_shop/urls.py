@@ -17,12 +17,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from rest_framework.routers import DefaultRouter
+from store.views import ProductViewSet, CategoryViewSet, SizeViewSet, ProductSizeViewSet, ImageViewSet
+from cart.views import CartItemViewSet
+
+router = DefaultRouter()
+router.register(r'products', ProductViewSet)
+router.register(r'categories', CategoryViewSet)
+router.register(r'sizes', SizeViewSet)
+router.register(r'product_sizes', ProductSizeViewSet)
+router.register(r'images', ImageViewSet)
+router.register(r'cart_items', CartItemViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("store.urls")),
+    path('', include(router.urls)),
     path('api/', include('store.urls')),
-
+    
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
